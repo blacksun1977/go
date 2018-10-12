@@ -44,6 +44,7 @@ type API interface {
 	RegisterExtension(extension Extension)
 	DecoderOf(typ reflect2.Type) ValDecoder
 	EncoderOf(typ reflect2.Type) ValEncoder
+	Marshal2File(lineDate int, writefun func(lineDate int, p []byte) error, v interface{}) error
 }
 
 // ConfigDefault the default API
