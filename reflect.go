@@ -219,7 +219,7 @@ type unknowTypeEncoder struct{
 }
 
 func (encoder unknowTypeEncoder) Encode(ptr unsafe.Pointer, stream *Stream) {
-	s := fmt.Sprintf("unknow data type of %#v, %#v", encoder.typ, ptr)
+	s := fmt.Sprintf("unknow data type of %s, %#v", encoder.typ.String(), ptr)
 	stream.WriteString(s)
 }
 
