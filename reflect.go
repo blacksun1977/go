@@ -214,6 +214,17 @@ func (encoder *onePtrEncoder) Encode(ptr unsafe.Pointer, stream *Stream) {
 	encoder.encoder.Encode(unsafe.Pointer(&ptr), stream)
 }
 
+type unknowTypeEncoder struct{}
+
+func (encoder unknowTypeEncoder) Encode(ptr unsafe.Pointer, stream *Stream) {
+	s := fmt.Sprintf("unknow data type of %#v", ptr)
+	stream.WriteString(s)
+}
+
+func (encoder unknowTypeEncoder) IsEmpty(ptr unsafe.Pointer) bool {
+	return true
+}
+
 func encoderOfType(ctx *ctx, typ reflect2.Type) ValEncoder {
 	encoder := getTypeEncoderFromExtension(ctx, typ)
 	if encoder != nil {
@@ -277,7 +288,8 @@ func _createEncoderOfType(ctx *ctx, typ reflect2.Type) ValEncoder {
 	case reflect.Ptr:
 		return encoderOfOptional(ctx, typ)
 	default:
-		return &lazyErrorEncoder{err: fmt.Errorf("%s%s is unsupported type", ctx.prefix, typ.String())}
+		return &unknowTypeEncoder{}
+		//return &lazyErrorEncoder{err: fmt.Errorf("%s%s is unsupported type", ctx.prefix, typ.String())}
 	}
 }
 
